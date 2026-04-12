@@ -18,9 +18,9 @@ const GuitarFretboard: React.FC<GuitarFretboardProps> = ({ notes, chordName }) =
   const strings = [1, 2, 3, 4, 5, 6];
 
   return (
-    <div id="chord-diagram" className="p-8 rounded-xl border overflow-hidden" style={{ backgroundColor: '#18181b', borderColor: '#27272a', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)' }}>
+    <div id="chord-diagram" className="p-8 rounded-xl border overflow-hidden" style={{ backgroundColor: '#111', borderColor: '#1a1a1a', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.5)' }}>
       <div className="mb-6 text-center">
-        <h2 className="text-3xl font-bold tracking-tight" style={{ color: '#fafafa' }}>{chordName}</h2>
+        <h2 className="text-3xl font-bold tracking-tight" style={{ color: '#e0e0e0' }}>{chordName}</h2>
       </div>
 
       <div className="relative flex justify-center">
@@ -30,8 +30,8 @@ const GuitarFretboard: React.FC<GuitarFretboardProps> = ({ notes, chordName }) =
           {/* Fret Numbers */}
           <div className="flex w-full mb-2">
             {frets.map((fret) => (
-              <div key={fret} className="flex-1 text-center text-xs font-mono" style={{ color: '#71717a' }}>
-                {fret}
+              <div key={fret} className="flex-1 text-center text-[10px] font-mono uppercase tracking-tighter" style={{ color: '#555' }}>
+                Fret {fret}
               </div>
             ))}
           </div>
@@ -39,16 +39,16 @@ const GuitarFretboard: React.FC<GuitarFretboardProps> = ({ notes, chordName }) =
           {/* The Grid */}
           <div className="relative flex">
             {/* Frets */}
-            <div className="flex border-r" style={{ borderColor: '#3f3f46' }}>
+            <div className="flex border-r" style={{ borderColor: '#222' }}>
               {frets.map((fret) => (
                 <div 
                   key={fret} 
                   className="w-16 h-48 border-l relative flex items-center justify-center"
-                  style={{ borderColor: '#3f3f46' }}
+                  style={{ borderColor: '#222' }}
                 >
                   {/* Fret Markers */}
                   {[3, 5, 7, 9, 12, 15, 17, 19, 21].includes(fret) && (
-                    <div className="absolute w-2 h-2 rounded-full opacity-50" style={{ backgroundColor: '#27272a' }} />
+                    <div className="absolute w-3 h-3 rounded-full opacity-20" style={{ backgroundColor: '#444' }} />
                   )}
                 </div>
               ))}
@@ -62,16 +62,11 @@ const GuitarFretboard: React.FC<GuitarFretboardProps> = ({ notes, chordName }) =
                   className="w-full relative"
                   style={{ 
                     height: `${1 + (6 - str) * 0.5}px`,
-                    opacity: 0.8,
-                    backgroundColor: '#a1a1aa',
-                    boxShadow: '0 1px 2px rgba(0,0,0,0.5)'
+                    opacity: 0.9,
+                    background: 'linear-gradient(to right, #222, #444, #222)',
+                    boxShadow: '0 1px 3px rgba(0,0,0,0.9)'
                   }}
-                >
-                  {/* String Label (optional) */}
-                  {/* <div className="absolute -left-6 top-1/2 -translate-y-1/2 text-[10px] text-zinc-600 uppercase">
-                    {['E', 'B', 'G', 'D', 'A', 'E'][str-1]}
-                  </div> */}
-                </div>
+                />
               ))}
             </div>
 
@@ -98,14 +93,14 @@ const GuitarFretboard: React.FC<GuitarFretboardProps> = ({ notes, chordName }) =
                   initial={{ scale: 0, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
                   transition={{ type: 'spring', stiffness: 300, damping: 20, delay: idx * 0.05 }}
-                  className={`absolute w-8 h-8 -translate-x-1/2 -translate-y-1/2 rounded-full flex items-center justify-center text-xs font-bold z-20`}
+                  className={`absolute w-8 h-8 -translate-x-1/2 -translate-y-1/2 rounded-full flex items-center justify-center text-[11px] font-mono font-bold z-20 transition-transform hover:scale-110`}
                   style={{ 
                     left: `${left}px`, 
                     top: `${top}px`,
-                    backgroundColor: note.isRoot ? '#f97316' : '#fafafa',
-                    color: note.isRoot ? '#ffffff' : '#18181b',
-                    border: note.isRoot ? '2px solid white' : (note.fret === 0 ? '2px solid #71717a' : 'none'),
-                    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)'
+                    backgroundColor: note.isRoot ? '#ff4444' : '#2a2a2a',
+                    color: note.isRoot ? '#ffffff' : '#ccc',
+                    border: note.isRoot ? '1px solid rgba(255,255,255,0.4)' : '1px solid #333',
+                    boxShadow: note.isRoot ? '0 0 15px rgba(255, 68, 68, 0.5)' : '0 4px 10px rgba(0, 0, 0, 0.5)'
                   }}
                 >
                   {note.interval}
@@ -117,18 +112,18 @@ const GuitarFretboard: React.FC<GuitarFretboardProps> = ({ notes, chordName }) =
       </div>
 
       {/* Legend */}
-      <div className="mt-8 flex justify-center gap-6 text-xs" style={{ color: '#a1a1aa' }}>
+      <div className="mt-10 flex justify-center gap-8 text-[10px] font-mono uppercase tracking-widest" style={{ color: '#555' }}>
         <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded-full border border-white" style={{ backgroundColor: '#f97316' }} />
-          <span>Tônica (Root)</span>
+          <div className="w-3 h-3 rounded-full border border-white/20" style={{ backgroundColor: '#ff4444', boxShadow: '0 0 10px rgba(255, 68, 68, 0.4)' }} />
+          <span>Root</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#fafafa' }} />
-          <span>Outras Notas</span>
+          <div className="w-3 h-3 rounded-full border border-[#333]" style={{ backgroundColor: '#2a2a2a' }} />
+          <span>Interval</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded-full border-2 border-zinc-500" style={{ backgroundColor: '#fafafa' }} />
-          <span>Corda Solta</span>
+          <div className="w-3 h-3 rounded-full border-2 border-[#444]" style={{ backgroundColor: '#2a2a2a' }} />
+          <span>Open</span>
         </div>
       </div>
     </div>

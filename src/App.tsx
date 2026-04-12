@@ -48,43 +48,47 @@ export default function App() {
   }, [key, type, extension, shape]);
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-100 p-4 md:p-8 font-sans">
-      <div className="max-w-5xl mx-auto space-y-8">
+    <div className="min-h-screen p-4 md:p-8 font-sans selection:bg-[#ff4444]/30">
+      <div className="max-w-5xl mx-auto space-y-10">
         {/* Header */}
-        <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="space-y-1">
-            <h1 className="text-4xl font-black tracking-tighter bg-gradient-to-br from-orange-400 via-orange-500 to-orange-700 bg-clip-text text-transparent uppercase italic">
-              CAGED Master
-            </h1>
-            <p className="text-zinc-500 text-sm">Allan Krainski — Mapeamento CAGED interativo</p>
+        <header className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-xl bg-[#ff4444] flex items-center justify-center shadow-[0_0_20px_rgba(255,68,68,0.4)]">
+              <Guitar className="text-white w-7 h-7" />
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold tracking-tight text-white">CAGED Master</h1>
+              <p className="text-xs text-[#888] font-mono uppercase tracking-widest">by Allan Krainski</p>
+            </div>
           </div>
         </header>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Controls */}
           <div className="lg:col-span-4 space-y-6">
-            <Card className="bg-zinc-900 border-zinc-800 text-zinc-100">
-              <CardHeader className="pb-4">
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <Music className="h-5 w-5 text-orange-500" />
+            <Card className="bg-[#111] rounded-2xl border-[#1a1a1a] text-[#e0e0e0] shadow-inner overflow-hidden">
+              <CardHeader className="pb-4 border-b border-[#1a1a1a]/50">
+                <CardTitle className="text-sm font-mono uppercase tracking-widest text-[#888] flex items-center gap-2">
+                  <Music className="h-4 w-4 text-[#ff4444]" />
                   Configurações
                 </CardTitle>
-                <CardDescription className="text-zinc-500">
-                  Escolha a tonalidade e o tipo do acorde
-                </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-6">
+              <CardContent className="space-y-8 pt-6">
                 {/* Key Selection */}
-                <div className="space-y-2">
-                  <Label className="text-xs uppercase tracking-wider text-zinc-500">Tonalidade</Label>
+                <div className="space-y-3">
+                  <Label className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#555]">Tonalidade</Label>
                   <div className="grid grid-cols-4 gap-2">
                     {NOTES.map((n) => (
                       <Button
                         key={n}
-                        variant={key === n ? 'default' : 'outline'}
+                        variant="outline"
                         size="sm"
                         onClick={() => setKey(n)}
-                        className={`h-9 ${key === n ? 'bg-orange-600 hover:bg-orange-700' : 'bg-zinc-950 border-zinc-800 hover:bg-zinc-800'}`}
+                        className={`h-9 font-mono transition-all duration-200 ${
+                          key === n 
+                            ? 'bg-[#ff4444] border-[#ff4444] text-white shadow-[0_0_15px_rgba(255,68,68,0.3)] scale-105' 
+                            : 'bg-[#1a1a1a] border-[#2a2a2a] text-[#888] hover:border-[#444] hover:text-white hover:scale-105'
+                        }`}
                       >
                         {n}
                       </Button>
@@ -92,47 +96,50 @@ export default function App() {
                   </div>
                 </div>
 
-                <Separator className="bg-zinc-800" />
+                <Separator className="bg-[#1a1a1a]" />
 
                 {/* Type Selection */}
-                <div className="space-y-2">
-                  <Label className="text-xs uppercase tracking-wider text-zinc-500">Tipo de Acorde</Label>
+                <div className="space-y-3">
+                  <Label className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#555]">Tipo de Acorde</Label>
                   <Tabs value={type} onValueChange={(v) => setType(v as ChordType)} className="w-full">
-                    <TabsList className="grid grid-cols-3 bg-zinc-950 border border-zinc-800 p-1">
-                      <TabsTrigger value="Major" className="data-[state=active]:bg-zinc-800 data-[state=active]:text-orange-400">Maior</TabsTrigger>
-                      <TabsTrigger value="Minor" className="data-[state=active]:bg-zinc-800 data-[state=active]:text-orange-400">Menor</TabsTrigger>
-                      <TabsTrigger value="Dominant" className="data-[state=active]:bg-zinc-800 data-[state=active]:text-orange-400">7</TabsTrigger>
+                    <TabsList className="grid grid-cols-3 bg-[#0a0a0a] border border-[#1a1a1a] p-1 h-11">
+                      <TabsTrigger value="Major" className="text-xs font-mono uppercase data-[state=active]:bg-[#1a1a1a] data-[state=active]:text-[#ff4444]">Maior</TabsTrigger>
+                      <TabsTrigger value="Minor" className="text-xs font-mono uppercase data-[state=active]:bg-[#1a1a1a] data-[state=active]:text-[#ff4444]">Menor</TabsTrigger>
+                      <TabsTrigger value="Dominant" className="text-xs font-mono uppercase data-[state=active]:bg-[#1a1a1a] data-[state=active]:text-[#ff4444]">7</TabsTrigger>
                     </TabsList>
                   </Tabs>
                 </div>
 
                 {/* Extension Selection */}
-                <div className="space-y-2">
-                  <Label className="text-xs uppercase tracking-wider text-zinc-500">Estrutura</Label>
+                <div className="space-y-3">
+                  <Label className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#555]">Estrutura</Label>
                   <Tabs value={extension} onValueChange={(v) => setExtension(v as ChordExtension)} className="w-full">
-                    <TabsList className="grid grid-cols-2 bg-zinc-950 border border-zinc-800 p-1">
-                      <TabsTrigger value="Triad" className="data-[state=active]:bg-zinc-800 data-[state=active]:text-orange-400">Tríade</TabsTrigger>
-                      <TabsTrigger value="Tetrad" className="data-[state=active]:bg-zinc-800 data-[state=active]:text-orange-400">Tétrade</TabsTrigger>
+                    <TabsList className="grid grid-cols-2 bg-[#0a0a0a] border border-[#1a1a1a] p-1 h-11">
+                      <TabsTrigger value="Triad" className="text-xs font-mono uppercase data-[state=active]:bg-[#1a1a1a] data-[state=active]:text-[#ff4444]">Tríade</TabsTrigger>
+                      <TabsTrigger value="Tetrad" className="text-xs font-mono uppercase data-[state=active]:bg-[#1a1a1a] data-[state=active]:text-[#ff4444]">Tétrade</TabsTrigger>
                     </TabsList>
                   </Tabs>
                 </div>
 
-                <Separator className="bg-zinc-800" />
+                <Separator className="bg-[#1a1a1a]" />
 
                 {/* CAGED Shape Selection */}
-                <div className="space-y-2">
-                  <Label className="text-xs uppercase tracking-wider text-zinc-500 flex items-center gap-2">
-                    <Guitar className="h-3 w-3" />
+                <div className="space-y-3">
+                  <Label className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#555] flex items-center gap-2">
                     Formato CAGED
                   </Label>
                   <div className="grid grid-cols-5 gap-2">
                     {(['C', 'A', 'G', 'E', 'D'] as CAGEDShape[]).map((s) => (
                       <Button
                         key={s}
-                        variant={shape === s ? 'default' : 'outline'}
+                        variant="outline"
                         size="sm"
                         onClick={() => setShape(s)}
-                        className={`h-10 ${shape === s ? 'bg-orange-600 hover:bg-orange-700' : 'bg-zinc-950 border-zinc-800 hover:bg-zinc-800'}`}
+                        className={`h-11 font-mono transition-all duration-200 ${
+                          shape === s 
+                            ? 'bg-[#ff4444] border-[#ff4444] text-white shadow-[0_0_15px_rgba(255,68,68,0.3)] scale-105' 
+                            : 'bg-[#1a1a1a] border-[#2a2a2a] text-[#888] hover:border-[#444] hover:text-white hover:scale-105'
+                        }`}
                       >
                         {s}
                       </Button>
@@ -143,12 +150,11 @@ export default function App() {
             </Card>
 
             {/* Info Card */}
-            <Card className="bg-zinc-900/50 border-zinc-800 text-zinc-400">
-              <CardContent className="p-4 flex gap-3 text-xs leading-relaxed">
-                <Info className="h-4 w-4 text-orange-500 shrink-0 mt-0.5" />
+            <Card className="bg-[#111] border-[#1a1a1a] text-[#888] rounded-2xl shadow-inner">
+              <CardContent className="p-5 flex gap-4 text-xs leading-relaxed font-mono uppercase tracking-tight">
+                <Info className="h-4 w-4 text-[#ff4444] shrink-0 mt-0.5" />
                 <p>
-                  O sistema **CAGED** permite tocar qualquer acorde em 5 regiões diferentes do braço. 
-                  Cada letra representa um formato básico de acorde aberto.
+                  O sistema <span className="text-[#e0e0e0]">CAGED</span> permite tocar qualquer acorde em 5 regiões diferentes do braço. 
                 </p>
               </CardContent>
             </Card>
@@ -159,22 +165,22 @@ export default function App() {
             <AnimatePresence mode="wait">
               <motion.div
                 key={`${key}-${type}-${extension}-${shape}`}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.3 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.2 }}
               >
                 <GuitarFretboard notes={chordNotes} chordName={chordName} />
               </motion.div>
             </AnimatePresence>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Card className="bg-zinc-900 border-zinc-800 text-zinc-100">
+              <Card className="bg-[#111] border-[#1a1a1a] text-[#e0e0e0] rounded-2xl shadow-inner">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-zinc-400">Fórmula do Acorde</CardTitle>
+                  <CardTitle className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#555]">Fórmula</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-xl font-mono text-orange-400">
+                  <p className="text-2xl font-mono text-[#ff4444] tracking-tighter">
                     {type === 'Major' && extension === 'Triad' && '1 - 3 - 5'}
                     {type === 'Major' && extension === 'Tetrad' && '1 - 3 - 5 - 7M'}
                     {type === 'Minor' && extension === 'Triad' && '1 - b3 - 5'}
@@ -183,17 +189,17 @@ export default function App() {
                   </p>
                 </CardContent>
               </Card>
-              <Card className="bg-zinc-900 border-zinc-800 text-zinc-100">
+              <Card className="bg-[#111] border-[#1a1a1a] text-[#e0e0e0] rounded-2xl shadow-inner">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-zinc-400">Dica</CardTitle>
+                  <CardTitle className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#555]">Dica Técnica</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-sm text-zinc-300">
-                    {shape === 'E' && 'Formato de Mi: Ótimo para acordes com pestana na 6ª corda.'}
-                    {shape === 'A' && 'Formato de Lá: Ótimo para acordes com pestana na 5ª corda.'}
-                    {shape === 'C' && 'Formato de Dó: Útil para voicings mais agudos e melodias.'}
-                    {shape === 'G' && 'Formato de Sol: Desafiador, mas oferece sonoridades ricas.'}
-                    {shape === 'D' && 'Formato de Ré: Focado nas cordas mais agudas.'}
+                  <p className="text-xs text-[#888] font-mono uppercase leading-relaxed">
+                    {shape === 'E' && 'Formato E: Pestana na 6ª corda.'}
+                    {shape === 'A' && 'Formato A: Pestana na 5ª corda.'}
+                    {shape === 'C' && 'Formato C: Voicings agudos.'}
+                    {shape === 'G' && 'Formato G: Sonoridades ricas.'}
+                    {shape === 'D' && 'Formato D: Cordas agudas.'}
                   </p>
                 </CardContent>
               </Card>
@@ -202,13 +208,15 @@ export default function App() {
         </div>
 
         {/* Footer */}
-        <footer className="pt-8 pb-4 border-t border-zinc-900 flex flex-col items-center gap-2">
-          <p className="text-zinc-500 text-xs tracking-widest uppercase">
-            Desenvolvido por <span className="text-zinc-300 font-medium">Allan Krainski</span>
+        <footer className="pt-12 pb-6 border-t border-[#1a1a1a] flex flex-col items-center gap-3">
+          <p className="text-[#555] text-[10px] font-mono tracking-[0.3em] uppercase">
+            Technical Hardware Interface — <span className="text-[#888]">Allan Krainski</span>
           </p>
-          <p className="text-zinc-600 text-[10px]">
-            © {new Date().getFullYear()} — Todos os direitos reservados
-          </p>
+          <div className="flex items-center gap-4 text-[#444] text-[9px] font-mono uppercase tracking-widest">
+            <span>© {new Date().getFullYear()}</span>
+            <span className="w-1 h-1 rounded-full bg-[#222]" />
+            <span>All Rights Reserved</span>
+          </div>
         </footer>
       </div>
     </div>
