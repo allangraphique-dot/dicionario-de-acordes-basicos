@@ -23,10 +23,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Tabs, TabsList, TabsTrigger } from './components/ui/tabs';
 import { Label } from './components/ui/label';
 import { Separator } from './components/ui/separator';
-import { Download, Music, Guitar, Info } from 'lucide-react';
+import { Music, Guitar, Info } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
 
 export default function App() {
   const [key, setKey] = useState<string>('C');
@@ -49,28 +47,6 @@ export default function App() {
     return `${name} (Formato ${shape})`;
   }, [key, type, extension, shape]);
 
-  const exportToPDF = async () => {
-    const element = document.getElementById('chord-diagram');
-    if (!element) return;
-
-    try {
-      const canvas = await html2canvas(element, {
-        backgroundColor: '#18181b', // zinc-900
-        scale: 2,
-      });
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF('l', 'mm', 'a4');
-      const imgProps = pdf.getImageProperties(imgData);
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-      
-      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-      pdf.save(`acorde-${chordName.replace(/\s+/g, '-').toLowerCase()}.pdf`);
-    } catch (error) {
-      console.error('Error exporting PDF:', error);
-    }
-  };
-
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-100 p-4 md:p-8 font-sans">
       <div className="max-w-5xl mx-auto space-y-8">
@@ -82,14 +58,6 @@ export default function App() {
             </h1>
             <p className="text-zinc-500 text-sm">Allan Krainski — Mapeamento CAGED interativo</p>
           </div>
-          <Button 
-            onClick={exportToPDF}
-            variant="outline" 
-            className="bg-zinc-900 border-zinc-800 hover:bg-zinc-800 hover:text-orange-400 transition-all"
-          >
-            <Download className="mr-2 h-4 w-4" />
-            Salvar em PDF
-          </Button>
         </header>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">

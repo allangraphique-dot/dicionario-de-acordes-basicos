@@ -11,8 +11,8 @@ const GuitarFretboard: React.FC<GuitarFretboardProps> = ({ notes, chordName }) =
   const minFret = Math.min(...notes.map(n => n.fret));
   const maxFret = Math.max(...notes.map(n => n.fret));
   
-  // We want to show at least 5 frets
-  const startFret = Math.max(0, minFret === 0 ? 0 : minFret - 1);
+  // We want to show at least 5 frets, starting from at least fret 1
+  const startFret = Math.max(1, minFret === 0 ? 1 : minFret);
   const fretCount = Math.max(5, maxFret - startFret + 1);
   const frets = Array.from({ length: fretCount }, (_, i) => startFret + i);
   const strings = [1, 2, 3, 4, 5, 6];
@@ -31,18 +31,13 @@ const GuitarFretboard: React.FC<GuitarFretboardProps> = ({ notes, chordName }) =
           <div className="flex w-full mb-2">
             {frets.map((fret) => (
               <div key={fret} className="flex-1 text-center text-xs font-mono" style={{ color: '#71717a' }}>
-                {fret > 0 ? fret : ''}
+                {fret}
               </div>
             ))}
           </div>
 
           {/* The Grid */}
           <div className="relative flex">
-            {/* Nut (if fret 0 is visible) */}
-            {startFret === 0 && (
-              <div className="absolute left-0 top-0 bottom-0 w-2 z-10 rounded-l-sm" style={{ backgroundColor: '#a1a1aa' }} />
-            )}
-
             {/* Frets */}
             <div className="flex border-r" style={{ borderColor: '#3f3f46' }}>
               {frets.map((fret) => (
@@ -83,13 +78,19 @@ const GuitarFretboard: React.FC<GuitarFretboardProps> = ({ notes, chordName }) =
             {/* Notes */}
             {notes.map((note, idx) => {
               const fretIndex = note.fret - startFret;
-              if (fretIndex < 0) return null;
-
+              
               // Position calculation
               // Each fret is 64px wide (w-16)
               // Each string is spaced equally in h-48
-              const left = note.fret === 0 ? -12 : (fretIndex * 64) + 32;
-              const top = (note.string - 1) * (192 / 5); // 192 is 48 * 4 (h-48 is 12rem = 192px)
+              let left = 0;
+              if (note.fret === 0) {
+                // Position open strings to the left of the first fret line
+                left = -24;
+              } else {
+                left = (fretIndex * 64) + 32;
+              }
+              
+              const top = (note.string - 1) * (192 / 5);
 
               return (
                 <motion.div
@@ -103,7 +104,7 @@ const GuitarFretboard: React.FC<GuitarFretboardProps> = ({ notes, chordName }) =
                     top: `${top}px`,
                     backgroundColor: note.isRoot ? '#f97316' : '#fafafa',
                     color: note.isRoot ? '#ffffff' : '#18181b',
-                    border: note.isRoot ? '2px solid white' : 'none',
+                    border: note.isRoot ? '2px solid white' : (note.fret === 0 ? '2px solid #71717a' : 'none'),
                     boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)'
                   }}
                 >
@@ -124,6 +125,10 @@ const GuitarFretboard: React.FC<GuitarFretboardProps> = ({ notes, chordName }) =
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#fafafa' }} />
           <span>Outras Notas</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-3 h-3 rounded-full border-2 border-zinc-500" style={{ backgroundColor: '#fafafa' }} />
+          <span>Corda Solta</span>
         </div>
       </div>
     </div>
