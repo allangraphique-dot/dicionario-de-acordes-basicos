@@ -64,9 +64,9 @@ export default function App() {
           </div>
         </header>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 lg:gap-10">
           {/* Controls */}
-          <div className="lg:col-span-4 space-y-6">
+          <div className="md:col-span-5 lg:col-span-4 space-y-6">
             <Card className="bg-[#111] rounded-2xl border-[#1a1a1a] text-[#e0e0e0] shadow-inner overflow-hidden">
               <CardHeader className="pb-4 border-b border-[#1a1a1a]/50">
                 <CardTitle className="text-sm font-mono uppercase tracking-widest text-[#888] flex items-center gap-2">
@@ -174,7 +174,7 @@ export default function App() {
           </div>
 
           {/* Visualization */}
-          <div className="lg:col-span-8 space-y-4">
+          <div className="md:col-span-7 lg:col-span-8 space-y-4">
             <div className="flex justify-end">
               <Button 
                 variant="outline" 
