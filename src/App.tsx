@@ -53,8 +53,8 @@ export default function App() {
         {/* Header */}
         <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="space-y-1">
-            <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-orange-400 to-orange-600 bg-clip-text text-transparent">
-              Dicionário de acordes básicos
+            <h1 className="text-4xl font-black tracking-tighter bg-gradient-to-br from-orange-400 via-orange-500 to-orange-700 bg-clip-text text-transparent uppercase italic">
+              CAGED Master
             </h1>
             <p className="text-zinc-500 text-sm">Allan Krainski — Mapeamento CAGED interativo</p>
           </div>
@@ -200,6 +200,16 @@ export default function App() {
             </div>
           </div>
         </div>
+
+        {/* Footer */}
+        <footer className="pt-8 pb-4 border-t border-zinc-900 flex flex-col items-center gap-2">
+          <p className="text-zinc-500 text-xs tracking-widest uppercase">
+            Desenvolvido por <span className="text-zinc-300 font-medium">Allan Krainski</span>
+          </p>
+          <p className="text-zinc-600 text-[10px]">
+            © {new Date().getFullYear()} — Todos os direitos reservados
+          </p>
+        </footer>
       </div>
     </div>
   );

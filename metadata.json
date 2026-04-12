@@ -1,5 +1,5 @@
 {
-  "name": "Dicionário de acordes básicos - Allan Krainski",
-  "description": "Um dicionário interativo de acordes de guitarra (maiores, menores e dominantes) usando o sistema CAGED, com exportação para PDF.",
+  "name": "CAGED Master",
+  "description": "Um dicionário interativo de acordes de guitarra (maiores, menores e dominantes) usando o sistema CAGED.",
   "requestFramePermissions": []
 }
