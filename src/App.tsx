@@ -31,6 +31,7 @@ export default function App() {
   const [type, setType] = useState<ChordType>('Major');
   const [extension, setExtension] = useState<ChordExtension>('Triad');
   const [shape, setShape] = useState<CAGEDShape>('C');
+  const [viewMode, setViewMode] = useState<'notes' | 'intervals'>('notes');
 
   const chordNotes = useMemo(() => {
     return calculateChordNotes(key, type, extension, shape);
@@ -101,11 +102,21 @@ export default function App() {
                 {/* Type Selection */}
                 <div className="space-y-3">
                   <Label className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#555]">Tipo de Acorde</Label>
-                  <Tabs value={type} onValueChange={(v) => setType(v as ChordType)} className="w-full">
+                  <Tabs 
+                    value={type} 
+                    onValueChange={(v) => {
+                      const newType = v as ChordType;
+                      setType(newType);
+                      if (newType === 'Dominant') {
+                        setExtension('Tetrad');
+                      }
+                    }} 
+                    className="w-full"
+                  >
                     <TabsList className="grid grid-cols-3 bg-[#0a0a0a] border border-[#1a1a1a] p-1 h-11">
                       <TabsTrigger value="Major" className="text-xs font-mono uppercase data-[state=active]:bg-[#1a1a1a] data-[state=active]:text-[#ff4444]">Maior</TabsTrigger>
                       <TabsTrigger value="Minor" className="text-xs font-mono uppercase data-[state=active]:bg-[#1a1a1a] data-[state=active]:text-[#ff4444]">Menor</TabsTrigger>
-                      <TabsTrigger value="Dominant" className="text-xs font-mono uppercase data-[state=active]:bg-[#1a1a1a] data-[state=active]:text-[#ff4444]">7</TabsTrigger>
+                      <TabsTrigger value="Dominant" className="text-xs font-mono uppercase data-[state=active]:bg-[#1a1a1a] data-[state=active]:text-[#ff4444]">Dominante</TabsTrigger>
                     </TabsList>
                   </Tabs>
                 </div>
@@ -114,8 +125,10 @@ export default function App() {
                 <div className="space-y-3">
                   <Label className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#555]">Estrutura</Label>
                   <Tabs value={extension} onValueChange={(v) => setExtension(v as ChordExtension)} className="w-full">
-                    <TabsList className="grid grid-cols-2 bg-[#0a0a0a] border border-[#1a1a1a] p-1 h-11">
-                      <TabsTrigger value="Triad" className="text-xs font-mono uppercase data-[state=active]:bg-[#1a1a1a] data-[state=active]:text-[#ff4444]">Tríade</TabsTrigger>
+                    <TabsList className={`grid ${type === 'Dominant' ? 'grid-cols-1' : 'grid-cols-2'} bg-[#0a0a0a] border border-[#1a1a1a] p-1 h-11 transition-all duration-300`}>
+                      {type !== 'Dominant' && (
+                        <TabsTrigger value="Triad" className="text-xs font-mono uppercase data-[state=active]:bg-[#1a1a1a] data-[state=active]:text-[#ff4444]">Tríade</TabsTrigger>
+                      )}
                       <TabsTrigger value="Tetrad" className="text-xs font-mono uppercase data-[state=active]:bg-[#1a1a1a] data-[state=active]:text-[#ff4444]">Tétrade</TabsTrigger>
                     </TabsList>
                   </Tabs>
@@ -161,7 +174,17 @@ export default function App() {
           </div>
 
           {/* Visualization */}
-          <div className="lg:col-span-8 space-y-6">
+          <div className="lg:col-span-8 space-y-4">
+            <div className="flex justify-end">
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => setViewMode(prev => prev === 'notes' ? 'intervals' : 'notes')}
+                className="bg-[#111] border-[#2a2a2a] text-[#888] hover:text-[#ff4444] hover:bg-[#1a1a1a] font-mono text-[10px] uppercase tracking-widest h-8 px-4"
+              >
+                Modo: <span className="text-[#e0e0e0] ml-1">{viewMode === 'notes' ? 'Notas' : 'Intervalos'}</span>
+              </Button>
+            </div>
             <AnimatePresence mode="wait">
               <motion.div
                 key={`${key}-${type}-${extension}-${shape}`}
@@ -170,7 +193,7 @@ export default function App() {
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.2 }}
               >
-                <GuitarFretboard notes={chordNotes} chordName={chordName} />
+                <GuitarFretboard notes={chordNotes} chordName={chordName} viewMode={viewMode} />
               </motion.div>
             </AnimatePresence>
 
@@ -189,6 +212,7 @@ export default function App() {
                   </p>
                 </CardContent>
               </Card>
+
               <Card className="bg-[#111] border-[#1a1a1a] text-[#e0e0e0] rounded-2xl shadow-inner">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#555]">Dica Técnica</CardTitle>

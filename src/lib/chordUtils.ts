@@ -1,5 +1,5 @@
 import { 
-  CAGED_MAJOR_SHAPES, 
+  CAGED_SHAPES, 
   CAGEDShape, 
   ChordExtension, 
   ChordNote, 
@@ -63,7 +63,7 @@ export function calculateChordNotes(
   extension: ChordExtension,
   shape: CAGEDShape
 ): ChordNote[] {
-  const baseNotes = JSON.parse(JSON.stringify(CAGED_MAJOR_SHAPES[shape])) as ChordNote[];
+  const baseNotes = JSON.parse(JSON.stringify(CAGED_SHAPES[shape][type][extension])) as ChordNote[];
   const rootFret = getRootFret(key, shape);
   
   // Offset to the correct key
@@ -80,129 +80,6 @@ export function calculateChordNotes(
   if (offset < 0) offset += 12;
 
   return baseNotes.map(note => {
-    let newNote = { ...note, fret: note.fret + offset };
-    
-    // Apply Chord Type (Major is default)
-    if (type === 'Minor') {
-      if (newNote.interval === '3') {
-        newNote.fret -= 1;
-        newNote.interval = 'b3';
-      }
-    }
-    
-    // Apply Extension
-    if (extension === 'Tetrad') {
-      // Replace one of the roots (usually the highest one or one that fits) with a 7th
-      // For simplicity, let's find a root that isn't the primary one or just add a 7th note if possible
-      // In CAGED, we usually modify one of the notes.
-      
-      if (type === 'Dominant') {
-        // b7
-        if (shape === 'E') {
-          // In E shape, the root on 4th string becomes b7 (fret -2)
-          if (newNote.string === 4 && newNote.isRoot) {
-            newNote.fret -= 2;
-            newNote.interval = 'b7';
-            newNote.isRoot = false;
-          }
-        } else if (shape === 'A') {
-          // In A shape, the root on 3rd string becomes b7 (fret -2)
-          if (newNote.string === 3 && newNote.isRoot) {
-            newNote.fret -= 2;
-            newNote.interval = 'b7';
-            newNote.isRoot = false;
-          }
-        } else if (shape === 'C') {
-          // In C shape, the root on 2nd string becomes b7 (fret -2)
-          if (newNote.string === 2 && newNote.isRoot) {
-            newNote.fret -= 2;
-            newNote.interval = 'b7';
-            newNote.isRoot = false;
-          }
-        } else if (shape === 'G') {
-          // In G shape, the root on 3rd string becomes b7 (fret -2)
-          if (newNote.string === 3 && newNote.isRoot) {
-            newNote.fret -= 2;
-            newNote.interval = 'b7';
-            newNote.isRoot = false;
-          }
-        } else if (shape === 'D') {
-          // In D shape, the root on 2nd string becomes b7 (fret -2)
-          if (newNote.string === 2 && newNote.isRoot) {
-            newNote.fret -= 2;
-            newNote.interval = 'b7';
-            newNote.isRoot = false;
-          }
-        }
-      } else if (type === 'Major') {
-        // 7th (Maj7)
-        if (shape === 'E') {
-          if (newNote.string === 4 && newNote.isRoot) {
-            newNote.fret -= 1;
-            newNote.interval = '7';
-            newNote.isRoot = false;
-          }
-        } else if (shape === 'A') {
-          if (newNote.string === 3 && newNote.isRoot) {
-            newNote.fret -= 1;
-            newNote.interval = '7';
-            newNote.isRoot = false;
-          }
-        } else if (shape === 'C') {
-          if (newNote.string === 2 && newNote.isRoot) {
-            newNote.fret -= 1;
-            newNote.interval = '7';
-            newNote.isRoot = false;
-          }
-        } else if (shape === 'G') {
-          if (newNote.string === 3 && newNote.isRoot) {
-            newNote.fret -= 1;
-            newNote.interval = '7';
-            newNote.isRoot = false;
-          }
-        } else if (shape === 'D') {
-          if (newNote.string === 2 && newNote.isRoot) {
-            newNote.fret -= 1;
-            newNote.interval = '7';
-            newNote.isRoot = false;
-          }
-        }
-      } else if (type === 'Minor') {
-        // b7 (m7)
-        if (shape === 'E') {
-          if (newNote.string === 4 && newNote.isRoot) {
-            newNote.fret -= 2;
-            newNote.interval = 'b7';
-            newNote.isRoot = false;
-          }
-        } else if (shape === 'A') {
-          if (newNote.string === 3 && newNote.isRoot) {
-            newNote.fret -= 2;
-            newNote.interval = 'b7';
-            newNote.isRoot = false;
-          }
-        } else if (shape === 'C') {
-          if (newNote.string === 2 && newNote.isRoot) {
-            newNote.fret -= 2;
-            newNote.interval = 'b7';
-            newNote.isRoot = false;
-          }
-        } else if (shape === 'G') {
-          if (newNote.string === 3 && newNote.isRoot) {
-            newNote.fret -= 2;
-            newNote.interval = 'b7';
-            newNote.isRoot = false;
-          }
-        } else if (shape === 'D') {
-          if (newNote.string === 2 && newNote.isRoot) {
-            newNote.fret -= 2;
-            newNote.interval = 'b7';
-            newNote.isRoot = false;
-          }
-        }
-      }
-    }
-    
-    return newNote;
+    return { ...note, fret: note.fret + offset };
   });
 }

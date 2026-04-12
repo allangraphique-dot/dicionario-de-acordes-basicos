@@ -1,13 +1,14 @@
 import React from 'react';
-import { ChordNote } from '../constants';
+import { ChordNote, NOTES } from '../constants';
 import { motion } from 'motion/react';
 
 interface GuitarFretboardProps {
   notes: ChordNote[];
   chordName: string;
+  viewMode: 'notes' | 'intervals';
 }
 
-const GuitarFretboard: React.FC<GuitarFretboardProps> = ({ notes, chordName }) => {
+const GuitarFretboard: React.FC<GuitarFretboardProps> = ({ notes, chordName, viewMode }) => {
   const minFret = Math.min(...notes.map(n => n.fret));
   const maxFret = Math.max(...notes.map(n => n.fret));
   
@@ -16,6 +17,27 @@ const GuitarFretboard: React.FC<GuitarFretboardProps> = ({ notes, chordName }) =
   const fretCount = Math.max(5, maxFret - startFret + 1);
   const frets = Array.from({ length: fretCount }, (_, i) => startFret + i);
   const strings = [1, 2, 3, 4, 5, 6];
+
+  const getNoteName = (fret: number, string: number) => {
+    // String base notes (0-indexed in NOTES): E=4, B=11, G=7, D=2, A=9, E=4
+    const stringBaseNotes: Record<number, number> = {
+      1: 4, // E
+      2: 11, // B
+      3: 7, // G
+      4: 2, // D
+      5: 9, // A
+      6: 4, // E
+    };
+    const baseNoteIndex = stringBaseNotes[string];
+    const noteIndex = (baseNoteIndex + fret) % 12;
+    return NOTES[noteIndex];
+  };
+
+  const getNoteLabel = (note: ChordNote) => {
+    if (viewMode === 'intervals') return note.interval;
+    if (viewMode === 'fingers') return note.finger || '';
+    return getNoteName(note.fret, note.string);
+  };
 
   return (
     <div id="chord-diagram" className="p-8 rounded-xl border overflow-hidden" style={{ backgroundColor: '#111', borderColor: '#1a1a1a', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.5)' }}>
@@ -103,7 +125,7 @@ const GuitarFretboard: React.FC<GuitarFretboardProps> = ({ notes, chordName }) =
                     boxShadow: note.isRoot ? '0 0 15px rgba(255, 68, 68, 0.5)' : '0 4px 10px rgba(0, 0, 0, 0.5)'
                   }}
                 >
-                  {note.interval}
+                  {getNoteLabel(note)}
                 </motion.div>
               );
             })}
@@ -115,15 +137,15 @@ const GuitarFretboard: React.FC<GuitarFretboardProps> = ({ notes, chordName }) =
       <div className="mt-10 flex justify-center gap-8 text-[10px] font-mono uppercase tracking-widest" style={{ color: '#555' }}>
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 rounded-full border border-white/20" style={{ backgroundColor: '#ff4444', boxShadow: '0 0 10px rgba(255, 68, 68, 0.4)' }} />
-          <span>Root</span>
+          <span>Tônica</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 rounded-full border border-[#333]" style={{ backgroundColor: '#2a2a2a' }} />
-          <span>Interval</span>
+          <span>{viewMode === 'notes' ? 'Nota' : 'Intervalo'}</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 rounded-full border-2 border-[#444]" style={{ backgroundColor: '#2a2a2a' }} />
-          <span>Open</span>
+          <span>Solta</span>
         </div>
       </div>
     </div>
