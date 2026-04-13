@@ -39,7 +39,7 @@ const GuitarFretboard: React.FC<GuitarFretboardProps> = ({ notes, chordName, vie
   };
 
   return (
-    <div id="chord-diagram" className="p-4 md:p-8 rounded-xl border overflow-hidden" style={{ backgroundColor: '#111', borderColor: '#1a1a1a', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.5)' }}>
+    <div id="chord-diagram" className="p-4 md:p-8 rounded-xl border overflow-hidden" style={{ backgroundColor: '#151515', borderColor: '#222', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.5)' }}>
       <div className="mb-6 text-center">
         <h2 className="text-2xl md:text-3xl font-bold tracking-tight" style={{ color: '#e0e0e0' }}>{chordName}</h2>
       </div>
@@ -52,7 +52,7 @@ const GuitarFretboard: React.FC<GuitarFretboardProps> = ({ notes, chordName, vie
             {/* Fret Numbers */}
             <div className="flex w-full mb-2">
               {frets.map((fret) => (
-                <div key={fret} className="flex-1 text-center text-[10px] font-mono uppercase tracking-tighter" style={{ color: '#555' }}>
+                <div key={fret} className="flex-1 text-center text-[10px] font-mono uppercase tracking-tighter" style={{ color: '#888' }}>
                   Fret {fret}
                 </div>
               ))}
@@ -60,17 +60,32 @@ const GuitarFretboard: React.FC<GuitarFretboardProps> = ({ notes, chordName, vie
 
             {/* The Grid */}
             <div className="relative flex">
+              {/* Nut (Pestana) */}
+              {startFret === 1 && (
+                <div 
+                  className="absolute left-0 z-10" 
+                  style={{ 
+                    width: '6px', 
+                    height: '192px', 
+                    backgroundColor: '#444',
+                    borderRadius: '2px',
+                    transform: 'translateX(-3px)',
+                    boxShadow: '2px 0 5px rgba(0,0,0,0.5)'
+                  }} 
+                />
+              )}
+
               {/* Frets */}
-              <div className="flex border-r" style={{ borderColor: '#222' }}>
+              <div className="flex border-r" style={{ borderColor: '#444' }}>
                 {frets.map((fret) => (
                   <div 
                     key={fret} 
                     className="w-16 h-48 border-l relative flex items-center justify-center"
-                    style={{ borderColor: '#222' }}
+                    style={{ borderColor: '#444' }}
                   >
                     {/* Fret Markers */}
                     {[3, 5, 7, 9, 12, 15, 17, 19, 21].includes(fret) && (
-                      <div className="absolute w-3 h-3 rounded-full opacity-20" style={{ backgroundColor: '#444' }} />
+                      <div className="absolute w-3 h-3 rounded-full opacity-40" style={{ backgroundColor: '#666' }} />
                     )}
                   </div>
                 ))}
@@ -84,8 +99,8 @@ const GuitarFretboard: React.FC<GuitarFretboardProps> = ({ notes, chordName, vie
                     className="w-full relative"
                     style={{ 
                       height: `${1 + (6 - str) * 0.5}px`,
-                      opacity: 0.9,
-                      background: 'linear-gradient(to right, #222, #444, #222)',
+                      opacity: 1,
+                      background: 'linear-gradient(to right, #444, #888, #444)',
                       boxShadow: '0 1px 3px rgba(0,0,0,0.9)'
                     }}
                   />
@@ -135,7 +150,7 @@ const GuitarFretboard: React.FC<GuitarFretboardProps> = ({ notes, chordName, vie
       </div>
 
       {/* Legend */}
-      <div className="mt-10 flex justify-center gap-8 text-[10px] font-mono uppercase tracking-widest" style={{ color: '#555' }}>
+      <div className="mt-10 flex justify-center gap-8 text-[10px] font-mono uppercase tracking-widest" style={{ color: '#888' }}>
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 rounded-full border border-white/20" style={{ backgroundColor: '#ff4444', boxShadow: '0 0 10px rgba(255, 68, 68, 0.4)' }} />
           <span>Tônica</span>
